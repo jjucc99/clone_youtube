@@ -6,8 +6,8 @@ import bodyParser from 'body-parser';
 import userRouter from './routers/userRouter';
 import videoRouter from './routers/videoRouter';
 import globalRouter from './routers/globalRouter';
-import routers from './routes';
 import routes from "./routes";
+import { localsMiddleware } from "./middlewares";
 
 const app = express()
 
@@ -17,21 +17,24 @@ const app = express()
 app.set('view engine','pug');
 
 
+//네트워크 보안을 강화해 주는 미들웨어
+app.use(helmet());
 //입력값을 분석하는 미들웨어 -- form data
 app.use(bodyParser.urlencoded({extended: true }))
 //입력값을 분석하는 미들웨어 -- json
 app.use(bodyParser.json())
 //현재 네트워크 상황을 알려주는 미들웨어
 app.use(morgan('dev'))
-//네트워크 보안을 강화해 주는 미들웨어
-app.use(helmet());
 //쿠키를 분석하는 미들웨어
 app.use(cookieParser());
+
+//grobal value을 local value로 접근하게 해주는 변수
+app.use(localsMiddleware);
 
 
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
-app.use(routers.videos, videoRouter);
+app.use(routes.videos, videoRouter);
 
 export default app;
