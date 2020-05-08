@@ -24,7 +24,7 @@ export const getLogin = (req, res) =>
     res.render("login",{pageTitle: 'login'});
 
 export const postLogin = (req, res) =>{
-    res.render("login",{pageTitle: 'login'})
+    // To Do save and send imformaiton
     res.redirect(routes.home)
 }
 
