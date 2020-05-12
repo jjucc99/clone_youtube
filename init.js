@@ -1,6 +1,10 @@
 import app from './app';
+import './db';
+import dotenv from 'dotenv';       
 
-const PORT = 3000;
+dotenv.config();
+
+const PORT = process.env.PORT || 3000 ;
 
 const handleLisning = () => console.log(`✅ Listning on: http://localhost:${PORT}`);
 

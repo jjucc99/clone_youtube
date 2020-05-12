@@ -117,3 +117,7 @@ dist
 .pnp.*
 
 package-lock.json
+
+.env
+
+videos 
