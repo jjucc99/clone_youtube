@@ -4,7 +4,7 @@ import Video from '../models/Video';
 
 export const home = async (req, res) =>{
     try {
-        const videos = await Video.find({})
+        const videos = await Video.find({}).sort({"_id": -1})
         res.render("home",{pageTitle: 'home', videos});
     } catch (error) {
         console.log(error)
@@ -12,14 +12,30 @@ export const home = async (req, res) =>{
     }
 } 
 
-export const search = (req, res) => {
-    const {query: { term : searchingBy}} = req;
-    res.render("search",{pageTitle: 'search', searchingBy, Videos})}
+export const search = async (req, res) => {
+    const {
+        query: { term: searchingBy }
+    } = req;
+
+    let videos = [];
     
+    try {
+        videos = await Video.find({
+        title: { $regex: searchingBy, $options: "i" }
+    });
+    } catch (error) {
+        console.log(error);
+    }
+    res.render("search", { pageTitle: "Search", searchingBy, videos});
+};
+
+
+
+    
+
 //uploadd의 페이지를 렌더링 하는 get 함수
 export const getUpload = (req, res) => 
     res.render("upload",{pageTitle: 'upload'});
-
 //get : upload 페이지가 정보를 전달할 때 받는 post 함수
 export const postUpload = async (req, res) => {
     const {
@@ -35,6 +51,10 @@ export const postUpload = async (req, res) => {
     res.redirect(routes.videoDetail(newVideo.id));
 };
 
+
+
+
+
 export const videoDetail = async (req, res) => {
     const {
         params: { id }
@@ -47,6 +67,12 @@ export const videoDetail = async (req, res) => {
         res.redirect(routes.home);
     }
 };
+
+
+
+
+
+
 export const getEditVideo = async (req, res) => {
     const {
         params: { id }
@@ -59,7 +85,6 @@ export const getEditVideo = async (req, res) => {
         res.redirect(routes.home);
     }
 }
-
 export const postEditVideo = async (req, res) => {
     const {
         params : {id},
@@ -73,6 +98,10 @@ export const postEditVideo = async (req, res) => {
         res.redirect(routes.home);
     }
 }
+
+
+
+
 export const deleteVideo = async (req, res) => {
     const {
         params : { id }
@@ -87,4 +116,3 @@ export const deleteVideo = async (req, res) => {
     res.render("deleteVideo",{pageTitle: 'deletVideo'});
     
 }
-    
