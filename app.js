@@ -27,10 +27,13 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 //쿠키를 분석하는 미들웨어
 app.use(cookieParser());
+// static === front end 작업을 노드 js와 연결하는 파일
+app.use('/static', express.static('static'))
 
 //만약 누군가 Video에 접근 했을 때 저장소에서 파일을 보내주는
 //미들웨어
 app.use('/uploads', express.static('uploads'))
+
 //grobal value을 local value로 접근하게 해주는 변수
 app.use(localsMiddleware);
 
