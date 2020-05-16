@@ -1,6 +1,9 @@
 mixin videoBlock(video = {})
     .videoBlock
         a(href=routes.videoDetail(video.id))
-            video.videoBlock__thumbnail(src=video.videoFile, controls, width="250", height="100")
+            video.videoBlock__thumbnail(src=video.videoFile, controls=false, width="400px", height="200px")
             h4.vidieoBlock__title=video.title
-            h6.videoBlcok__view= video.views
+            if video.views === 1
+                h6.videoBlock__views 1 view
+            else
+                h6.videoBlock__views #{video.views} views 
