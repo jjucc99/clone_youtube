@@ -3,13 +3,23 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cookieParser  from  'cookie-parser';
 import bodyParser from 'body-parser';
+import passport from 'passport';
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
+
+import routes from "./routes";
 import userRouter from './routers/userRouter';
 import videoRouter from './routers/videoRouter';
 import globalRouter from './routers/globalRouter';
-import routes from "./routes";
+
 import { localsMiddleware } from "./middlewares";
+import './passport';
+
 
 const app = express()
+
+const CokieStore = MongoStore(session)
 
 //pug을 쓰기 위해 epress 설정을 다듬는다.
 //pug는 view engine 중 하나로 사용하기 위해선 views 라는 이름의 파일과 
@@ -36,6 +46,15 @@ app.use('/uploads', express.static('uploads'))
 
 //grobal value을 local value로 접근하게 해주는 변수
 app.use(localsMiddleware);
+
+//인증을 위한 cokies을 사용하기 위해서 session을 사용한다.
+app.use(session({
+    secret : process.env.COOKIE_SECRET
+}))
+
+//passport을 사용하기 위해서 사용하는 passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
